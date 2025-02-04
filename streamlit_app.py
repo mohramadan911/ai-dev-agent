@@ -51,3 +51,34 @@ if st.button("Process Task"):
                 st.markdown(diagram_and_rest[1])
         else:
             st.markdown(response)
+
+selected_example = st.sidebar.selectbox(
+    "Example Tasks",
+    example_tasks[role]
+)
+
+# Input area
+with st.form("task_form"):
+    task = st.text_area("Enter your task:", value=selected_example, height=100)
+    submitted = st.form_submit_button("Generate Response")
+
+if submitted:
+    with st.spinner("Generating response..."):
+        response = st.session_state.agent.process_task(task, role)
+        
+        # Split response if it contains a Mermaid diagram
+        if "```mermaid" in response:
+            parts = response.split("```mermaid")
+            # Show text before diagram
+            st.markdown(parts[0])
+            
+            # Extract and render diagram
+            diagram_code = parts[1].split("```")[0]
+            render_mermaid(diagram_code)
+            
+            # Show remaining text
+            remaining_text = parts[1].split("```")[1]
+            st.markdown(remaining_text)
+        else:
+            # If no diagram, just show the response
+            st.markdown(response)

@@ -32,7 +32,7 @@ role = st.sidebar.selectbox(
 )
 
 # Main content
-st.title("AI Development Agent Demo")
+st.title("DataServe AI Development Agent Demo")
 
 # Input area
 with st.form("task_form"):
